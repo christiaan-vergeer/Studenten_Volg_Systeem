@@ -64,13 +64,13 @@ namespace Studenten_Volg_Systeem
         // GET: Students/Create
         public IActionResult Create()
         {
-            //var StudentenViewModel = new student
-            //{
-            //    Student = new Student(),
-            //    Courses = db.Courses.ToList()
-            //};
-            //return View(StudentenViewModel);
-            return View();
+
+            var ViewModel = new StudentCreateViewModel
+            {
+                Student = new Student(),
+                Courses = db.Courses.ToList()
+            };
+            return View(ViewModel);
         }
 
         // POST: Students/Create
@@ -78,15 +78,17 @@ namespace Studenten_Volg_Systeem
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Firstname,Middelname,Lastname,Adress")] Student student)
+        public async Task<IActionResult> Create([Bind("Student,CourseID")] StudentCreateViewModel studentCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                db.Add(student);
+                var student = studentCreateViewModel.Student;
+                student.Course = db.Courses.Find(studentCreateViewModel.CourseID);
+                db.Students.Add(student);
                 await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(studentCreateViewModel);
         }
 
         // GET: Students/Edit/5
