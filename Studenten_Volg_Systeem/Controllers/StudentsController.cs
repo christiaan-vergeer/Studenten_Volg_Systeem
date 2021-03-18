@@ -51,8 +51,7 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var student = await db.Students
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var student = await db.Students.FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
                 return NotFound();
@@ -99,12 +98,17 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var student = await db.Students.FindAsync(id);
-            if (student == null)
+            var viewmodel =  new StudentCreateViewModel {
+                Student = db.Students.Include(r => r.Course).FirstOrDefault(r => r.Id == id),
+                Courses = db.Courses.ToList()
+            };
+            //await db.Students.FindAsync(id);
+            viewmodel.CourseID = viewmodel.Student.Course.Id;
+            if (viewmodel == null)
             {
                 return NotFound();
             }
-            return View(student);
+            return View(viewmodel);
         }
 
         // POST: Students/Edit/5
@@ -112,9 +116,9 @@ namespace Studenten_Volg_Systeem
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Firstname,Middelname,Lastname,Adress")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("Student,CourseID")] StudentCreateViewModel studentCreateViewModel)
         {
-            if (id != student.Id)
+            if (id != studentCreateViewModel.Student.Id)
             {
                 return NotFound();
             }
@@ -123,12 +127,14 @@ namespace Studenten_Volg_Systeem
             {
                 try
                 {
+                    var student = studentCreateViewModel.Student;
+                    student.Course = db.Courses.Find(studentCreateViewModel.CourseID);
                     db.Update(student);
                     await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentExists(student.Id))
+                    if (!StudentExists(studentCreateViewModel.Student.Id))
                     {
                         return NotFound();
                     }
@@ -139,7 +145,7 @@ namespace Studenten_Volg_Systeem
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(student);
+            return View(studentCreateViewModel);
         }
 
         // GET: Students/Delete/5
