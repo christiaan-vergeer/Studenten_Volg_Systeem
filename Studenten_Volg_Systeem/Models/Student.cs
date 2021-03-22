@@ -13,7 +13,7 @@ namespace Studenten_Volg_Systeem.Models
         public string Lastname { get; set; }
         public string Adress { get; set; }
         public Course Course { get; set; }
-        public ICollection<Absentie> Absenties { get; set; }
+        public ICollection<Attendance> Absenties { get; set; }
 
     }
 }

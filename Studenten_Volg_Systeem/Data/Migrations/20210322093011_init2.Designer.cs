@@ -3,21 +3,38 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Studenten_Volg_Systeem.Data;
 
 namespace Studenten_Volg_Systeem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210322093011_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CourseProffesor", b =>
+                {
+                    b.Property<int>("CoursesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProffesorsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CoursesId", "ProffesorsId");
+
+                    b.HasIndex("ProffesorsId");
+
+                    b.ToTable("CourseProffesor");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -229,20 +246,15 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                     b.Property<int?>("LessonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PresentId")
-                        .HasColumnType("int");
+                    b.Property<bool>("Present")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LessonId");
-
-                    b.HasIndex("PresentId");
 
                     b.HasIndex("StudentId");
 
@@ -291,15 +303,10 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CoursesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoursesId");
 
                     b.ToTable("Proffesors");
                 });
@@ -331,6 +338,21 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("CourseProffesor", b =>
+                {
+                    b.HasOne("Studenten_Volg_Systeem.Models.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Studenten_Volg_Systeem.Models.Proffesor", null)
+                        .WithMany()
+                        .HasForeignKey("ProffesorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -390,17 +412,11 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                         .WithMany("Absenties")
                         .HasForeignKey("LessonId");
 
-                    b.HasOne("Studenten_Volg_Systeem.Models.Absentie", "Present")
-                        .WithMany()
-                        .HasForeignKey("PresentId");
-
                     b.HasOne("Studenten_Volg_Systeem.Models.Student", "Student")
                         .WithMany("Absenties")
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Lesson");
-
-                    b.Navigation("Present");
 
                     b.Navigation("Student");
                 });
@@ -412,15 +428,6 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                         .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("Studenten_Volg_Systeem.Models.Proffesor", b =>
-                {
-                    b.HasOne("Studenten_Volg_Systeem.Models.Course", "Courses")
-                        .WithMany("Proffesors")
-                        .HasForeignKey("CoursesId");
-
-                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("Studenten_Volg_Systeem.Models.Student", b =>
@@ -435,8 +442,6 @@ namespace Studenten_Volg_Systeem.Data.Migrations
             modelBuilder.Entity("Studenten_Volg_Systeem.Models.Course", b =>
                 {
                     b.Navigation("Lessons");
-
-                    b.Navigation("Proffesors");
 
                     b.Navigation("Students");
                 });

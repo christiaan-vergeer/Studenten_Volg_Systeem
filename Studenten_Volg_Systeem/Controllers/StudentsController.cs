@@ -51,7 +51,7 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var student = await db.Students.FirstOrDefaultAsync(m => m.Id == id);
+            var student = await db.Students.Include(m => m.Course).FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
                 return NotFound();
@@ -156,7 +156,7 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var student = await db.Students
+            var student = await db.Students.Include(m => m.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {

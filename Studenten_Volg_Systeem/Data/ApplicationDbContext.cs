@@ -18,6 +18,6 @@ namespace Studenten_Volg_Systeem.Data
 
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Absentie> Absenties { get; set; }
+        public DbSet<Attendance> Absenties { get; set; }
     }
 }

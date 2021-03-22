@@ -10,33 +10,44 @@
     <h4>Student</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Firstname)
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Firstname)*@
+            Voornaam
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Firstname)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Middelname)
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Middelname)*@
+            Tussen Naam
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Middelname)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Lastname)
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Lastname)*@
+            Achternaam
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Lastname)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Adress)
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Adress)*@
+            Adress
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Adress)
+        </dd>
+        <dt class="col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Course)*@
+            Opleiding
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Name)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Pas Aan</a> |
+    <a asp-action="Index">Terug Naar Studenten</a>
 </div>

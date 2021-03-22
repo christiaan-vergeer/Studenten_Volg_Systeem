@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Aanpassen</h1>
 
 <h4>Student</h4>
 <hr />
@@ -14,40 +14,40 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Student.Id" />
             <div class="form-group">
-                <label asp-for="Student.Firstname" class="control-label"></label>
+                <label @*asp-for="Student.Firstname"*@ class="control-label">Voornaam</label>
                 <input asp-for="Student.Firstname" class="form-control" />
                 <span asp-validation-for="Student.Firstname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Student.Middelname" class="control-label"></label>
+                <label @*asp-for="Student.Middelname"*@ class="control-label">Tussennaam</label>
                 <input asp-for="Student.Middelname" class="form-control" />
                 <span asp-validation-for="Student.Middelname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Student.Lastname" class="control-label"></label>
+                <label @*asp-for="Student.Lastname"*@ class="control-label">Achternaam</label>
                 <input asp-for="Student.Lastname" class="form-control" />
                 <span asp-validation-for="Student.Lastname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Student.Adress" class="control-label"></label>
+                <label @*asp-for="Student.Adress"*@ class="control-label">Adress</label>
                 <input asp-for="Student.Adress" class="form-control" />
                 <span asp-validation-for="Student.Adress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Courses" class="control-label"></label>
+                <label @*asp-for="Courses"*@ class="control-label">Opleiding</label>
                 <select asp-for="CourseID" asp-items="Model.Courses.Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() })"></select>
                 <span asp-validation-for="CourseID" class="text-danger"></span>
 
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Sla Op" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug Naar Studenten</a>
 </div>
 
 @section Scripts {

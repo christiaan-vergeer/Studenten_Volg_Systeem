@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Studenten_Volg_Systeem.Data;
 
 namespace Studenten_Volg_Systeem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210322103259_profcourse")]
+    partial class profcourse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,20 +231,15 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                     b.Property<int?>("LessonId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PresentId")
-                        .HasColumnType("int");
+                    b.Property<bool>("Present")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.HasIndex("LessonId");
-
-                    b.HasIndex("PresentId");
 
                     b.HasIndex("StudentId");
 
@@ -390,17 +387,11 @@ namespace Studenten_Volg_Systeem.Data.Migrations
                         .WithMany("Absenties")
                         .HasForeignKey("LessonId");
 
-                    b.HasOne("Studenten_Volg_Systeem.Models.Absentie", "Present")
-                        .WithMany()
-                        .HasForeignKey("PresentId");
-
                     b.HasOne("Studenten_Volg_Systeem.Models.Student", "Student")
                         .WithMany("Absenties")
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Lesson");
-
-                    b.Navigation("Present");
 
                     b.Navigation("Student");
                 });

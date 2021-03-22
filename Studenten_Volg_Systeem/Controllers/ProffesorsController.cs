@@ -7,22 +7,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Studenten_Volg_Systeem.Data;
 using Studenten_Volg_Systeem.Models;
+using Studenten_Volg_Systeem.ViewModels;
 
 namespace Studenten_Volg_Systeem
 {
     public class ProffesorsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext db;
 
         public ProffesorsController(ApplicationDbContext context)
         {
-            _context = context;
+            db = context;
         }
 
         // GET: Proffesors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Proffesors.ToListAsync());
+
+            var students = await db.Proffesors.Select(s => new StudentListItemViewModel
+            {
+                Id = s.Id,
+                Fullname = s.Name,
+                Course = s.Courses.Name
+
+            }).ToListAsync();
+
+            return View(students);
         }
 
         // GET: Proffesors/Details/5
@@ -33,7 +43,7 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var proffesor = await _context.Proffesors
+            var proffesor = await db.Proffesors.Include(m => m.Courses)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (proffesor == null)
             {
@@ -46,7 +56,12 @@ namespace Studenten_Volg_Systeem
         // GET: Proffesors/Create
         public IActionResult Create()
         {
-            return View();
+            var ViewModel = new ProfessorCreateViewModel
+            {
+                Proffesor = new Proffesor(),
+                Courses = db.Courses.ToList()
+            };
+            return View(ViewModel);
         }
 
         // POST: Proffesors/Create
@@ -54,15 +69,17 @@ namespace Studenten_Volg_Systeem
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Proffesor proffesor)
+        public async Task<IActionResult> Create([Bind("Proffesor,CourseID")] ProfessorCreateViewModel professorCreateViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(proffesor);
-                await _context.SaveChangesAsync();
+                var proffesor = professorCreateViewModel.Proffesor;
+                proffesor.Courses = db.Courses.Find(professorCreateViewModel.CourseID);
+                db.Proffesors.Add(proffesor);
+                await db.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(proffesor);
+            return View(professorCreateViewModel);
         }
 
         // GET: Proffesors/Edit/5
@@ -73,12 +90,20 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var proffesor = await _context.Proffesors.FindAsync(id);
-            if (proffesor == null)
+            var viewmodel = new ProfessorCreateViewModel
+            {
+                Proffesor = db.Proffesors.Include(r => r.Courses).FirstOrDefault(r => r.Id == id),
+                Courses = db.Courses.ToList()
+            };
+            //await db.Students.FindAsync(id);
+            viewmodel.CourseID = viewmodel.Proffesor.Courses.Id;
+
+            //var proffesor = await db.Proffesors.FindAsync(id);
+            if (viewmodel == null)
             {
                 return NotFound();
             }
-            return View(proffesor);
+            return View(viewmodel);
         }
 
         // POST: Proffesors/Edit/5
@@ -86,9 +111,9 @@ namespace Studenten_Volg_Systeem
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Proffesor proffesor)
+        public async Task<IActionResult> Edit(int id, [Bind("Proffesor,CourseID")] ProfessorCreateViewModel professorCreateViewModel)
         {
-            if (id != proffesor.Id)
+            if (id != professorCreateViewModel.Proffesor.Id)
             {
                 return NotFound();
             }
@@ -97,12 +122,14 @@ namespace Studenten_Volg_Systeem
             {
                 try
                 {
-                    _context.Update(proffesor);
-                    await _context.SaveChangesAsync();
+                    var proffesor = professorCreateViewModel.Proffesor;
+                    proffesor.Courses = db.Courses.Find(professorCreateViewModel.CourseID);
+                    db.Update(proffesor);
+                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProffesorExists(proffesor.Id))
+                    if (!ProffesorExists(professorCreateViewModel.Proffesor.Id))
                     {
                         return NotFound();
                     }
@@ -113,7 +140,7 @@ namespace Studenten_Volg_Systeem
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(proffesor);
+            return View(professorCreateViewModel);
         }
 
         // GET: Proffesors/Delete/5
@@ -124,7 +151,7 @@ namespace Studenten_Volg_Systeem
                 return NotFound();
             }
 
-            var proffesor = await _context.Proffesors
+            var proffesor = await db.Proffesors.Include(m => m.Courses)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (proffesor == null)
             {
@@ -139,15 +166,15 @@ namespace Studenten_Volg_Systeem
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var proffesor = await _context.Proffesors.FindAsync(id);
-            _context.Proffesors.Remove(proffesor);
-            await _context.SaveChangesAsync();
+            var proffesor = await db.Proffesors.FindAsync(id);
+            db.Proffesors.Remove(proffesor);
+            await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProffesorExists(int id)
         {
-            return _context.Proffesors.Any(e => e.Id == id);
+            return db.Proffesors.Any(e => e.Id == id);
         }
     }
 }

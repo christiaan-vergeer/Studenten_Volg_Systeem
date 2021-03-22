@@ -1,31 +1,37 @@
-﻿@model Studenten_Volg_Systeem.Models.Proffesor
+﻿@model Studenten_Volg_Systeem.ViewModels.ProfessorCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Aanmaken</h1>
 
-<h4>Proffesor</h4>
+<h4>Docent</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label @*asp-for="Name"*@ class="control-label">Naam</label>
+                <input asp-for="Proffesor.Name" class="form-control" />
+                <span asp-validation-for="Proffesor.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label @*asp-for="Courses"*@ class="control-label">Opleiding</label>
+                <select asp-for="CourseID" asp-items="Model.Courses.Select(m => new SelectListItem { Text = m.Name, Value = m.Id.ToString() })"></select>
+                <span asp-validation-for="CourseID" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Maak Aan" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug Naar Docenten</a>
 </div>
 
 @section Scripts {
