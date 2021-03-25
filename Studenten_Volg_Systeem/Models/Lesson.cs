@@ -14,7 +14,7 @@ namespace Studenten_Volg_Systeem.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         public DateTime Date { get; set; }
-        public ICollection<Attendance> Absenties { get; set; }
+        public ICollection<Attendance> Attendances { get; set; }
 
     }
 }

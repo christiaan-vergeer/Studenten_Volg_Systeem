@@ -1,32 +1,110 @@
-﻿@model Studenten_Volg_Systeem.Models.Course
+﻿@model Studenten_Volg_Systeem.ViewModels.CourseCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Maak een opleiding aan</h1>
 
-<h4>Course</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label @*asp-for="Course.Name"*@ class="control-label">Naam Opleiding</label>
+                <input asp-for="Course.Name" class="form-control" />
+                <span asp-validation-for="Course.Name" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label @*asp-for="StartDate"*@ class="control-label">Begindatum</label>
+                <input type="date" asp-for="StartDate" value="2020-03-25"
+                       min="2018-01-01" max="2025-01-01" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label a@*sp-for="EndDate"*@ class="control-label">Einddatum</label>
+                <input type="date" asp-for="EndDate" value="2020-03-25"
+                       min="2018-01-01" max="2025-01-01" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <label>Dagen van de week dat les word gegeven:</label>
+            <div class="form-group">
+                <table>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Monday"*@ class="control-label">Maandag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Monday" />
+                            <span asp-validation-for="Monday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Tuesday"*@ class="control-label">Dinsdag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Tuesday" />
+                            <span asp-validation-for="Tuesday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Wednesday"*@ class="control-label">Woensdag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Wednesday" />
+                            <span asp-validation-for="Wednesday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Thursday"*@ class="control-label">Donderdag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Thursday" />
+                            <span asp-validation-for="Thursday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Friday"*@ class="control-label">Vrijdag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Friday" />
+                            <span asp-validation-for="Friday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Saturday"*@ class="control-label">Zaterdag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Saturday" />
+                            <span asp-validation-for="Saturday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label @*asp-for="Sunday"*@ class="control-label">Zondag</label>
+                        </td>
+                        <td>
+                            <input type="checkbox" asp-for="Sunday" />
+                            <span asp-validation-for="Sunday" class="text-danger"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Maak Aan" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug naar de opleidingen</a>
 </div>
 
 @section Scripts {
